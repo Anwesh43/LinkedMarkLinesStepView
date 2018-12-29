@@ -44,7 +44,7 @@ fun Canvas.drawMLSNode(i : Int, scale : Float, paint : Paint) {
     val xGap : Float = size / ((lines + 1)/2)
     paint.color = foreColor
     paint.strokeWidth = Math.min(w, h) / strokeFactor
-    paint.strokeCap = Paint.Cap.ROUND 
+    paint.strokeCap = Paint.Cap.ROUND
     save()
     translate(gap * (i + 1), h/2)
     rotate(-90f * sc1)
@@ -58,4 +58,24 @@ fun Canvas.drawMLSNode(i : Int, scale : Float, paint : Paint) {
         drawLine(0f, 0f, x, 0f, paint)
     }
     restore()
+}
+
+class MarkLinesStepView(ctx : Context) : View(ctx)  {
+
+    private val paint : Paint = Paint(Paint.ANTI_ALIAS_FLAG)
+
+    override fun onDraw(canvas : Canvas) {
+
+    }
+
+    override fun onTouchEvent(event : MotionEvent) : Boolean {
+        when (event.action) {
+            MotionEvent.ACTION_DOWN -> {
+
+            }
+        }
+        return true
+    }
+
+
 }
