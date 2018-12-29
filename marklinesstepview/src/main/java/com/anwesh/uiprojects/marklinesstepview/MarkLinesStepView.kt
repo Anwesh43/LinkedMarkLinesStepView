@@ -11,6 +11,7 @@ import android.app.Activity
 import android.graphics.Paint
 import android.graphics.Color
 import android.graphics.Canvas
+import android.util.Log
 
 val nodes : Int = 5
 val lines : Int = 5
@@ -24,7 +25,7 @@ val sizeFactor : Float = 2.6f
 
 fun Int.inverse() : Float = 1f / this
 
-fun Float.maxScale(i : Int, n : Int) : Float = Math.max(0f, this - i / n)
+fun Float.maxScale(i : Int, n : Int) : Float = Math.max(0f, this - i * n.inverse())
 
 fun Float.divideScale(i : Int, n : Int) = Math.min(n.inverse(), maxScale(i, n)) * n
 
@@ -41,21 +42,26 @@ fun Canvas.drawMLSNode(i : Int, scale : Float, paint : Paint) {
     val size : Float = gap / sizeFactor
     val sc1 : Float = scale.divideScale(0, 2)
     val sc2 : Float = scale.divideScale(1, 2)
-    val xGap : Float = size / ((lines + 1)/2)
+    val xGap : Float = (2 * size) / ((lines + 1)/2)
+    val yGap : Float = (2 * size) / (lines - 1)
     paint.color = foreColor
     paint.strokeWidth = Math.min(w, h) / strokeFactor
     paint.strokeCap = Paint.Cap.ROUND
     save()
     translate(gap * (i + 1), h/2)
-    rotate(-90f * sc1)
+    rotate(-90f * sc2)
     translate(-size, -size)
     drawLine(0f, 0f, 0f, 2 * size, paint)
     for (j in 0..(lines - 1)) {
         var newJ : Int = j + 1
-        newJ = Math.min(lines - newJ, newJ)
+        newJ = Math.min(lines - j, newJ)
         val sc : Float = sc1.divideScale(j, lines)
+        if (sc > 0 && sc < 1) {
+            Log.d("active index and scale ", "$newJ, $sc, $sc1, $sc2")
+        }
         val x : Float = newJ * xGap * sc
-        drawLine(0f, 0f, x, 0f, paint)
+        val y : Float = yGap * j
+        drawLine(0f, y, x, y, paint)
     }
     restore()
 }
