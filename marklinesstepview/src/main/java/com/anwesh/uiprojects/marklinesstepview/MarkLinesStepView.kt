@@ -215,4 +215,12 @@ class MarkLinesStepView(ctx : Context) : View(ctx)  {
             }
         }
     }
+
+    companion object {
+        fun create(activity : Activity) : MarkLinesStepView {
+            val view : MarkLinesStepView = MarkLinesStepView(activity)
+            activity.setContentView(view)
+            return view
+        }
+    }
 }
