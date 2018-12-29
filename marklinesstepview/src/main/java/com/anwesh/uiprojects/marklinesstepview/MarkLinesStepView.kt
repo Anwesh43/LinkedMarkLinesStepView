@@ -193,4 +193,25 @@ class MarkLinesStepView(ctx : Context) : View(ctx)  {
             curr.startUpdating(cb)
         }
     }
+
+    data class Renderer(val view : MarkLinesStepView) {
+        private val animator : Animator = Animator(view)
+        private val mls : MarkLinesStep = MarkLinesStep(0)
+
+        fun render(canvas : Canvas, paint : Paint) {
+            canvas.drawColor(backColor)
+            mls.draw(canvas, paint)
+            animator.animate {
+                mls.update {i, scl ->
+                    animator.stop()
+                }
+            }
+        }
+
+        fun handleTap() {
+            mls.startUpdating {
+                animator.start()
+            }
+        }
+    }
 }
